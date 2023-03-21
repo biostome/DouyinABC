@@ -139,6 +139,7 @@ class VideoView: UIView {
     private var playerLayer: AVPlayerLayer?
     private var playerItem: AVPlayerItem?
     private var videoURL: URL
+    private var pauseImageView: UIImageView = UIImageView(image: UIImage(systemName:"play.fill"))
     
     init(frame: CGRect ,videoURL: URL) {
         self.videoURL = videoURL
@@ -159,6 +160,19 @@ class VideoView: UIView {
         self.playerLayer = AVPlayerLayer(player: self.player)
         self.playerLayer?.frame = self.bounds
         self.layer.addSublayer(self.playerLayer!)
+        
+        self.addSubview(pauseImageView)
+        self.pauseImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.pauseImageView.backgroundColor = .clear
+        self.pauseImageView.tintColor = .white
+        self.pauseImageView.alpha = 0.3
+        self.pauseImageView.isHidden = true
+        NSLayoutConstraint.activate([
+            self.pauseImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            self.pauseImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            self.pauseImageView.widthAnchor.constraint(equalToConstant: 80),
+            self.pauseImageView.heightAnchor.constraint(equalToConstant: 80),
+        ])
         
         // Add progress bar to view
         self.addSubview(self.playerProgress)
@@ -231,7 +245,11 @@ class VideoView: UIView {
         })
     }
     
-    @objc internal func playerItemDidFinishPlaying() {
+    func pauseImageHidden(hidden: Bool) {
+        self.pauseImageView.isHidden = hidden
+    }
+    
+    @objc func playerItemDidFinishPlaying() {
         // Notify delegate that video finished playing
         replay()
     }
@@ -258,9 +276,11 @@ class VideoView: UIView {
     @objc private func didTapView() {
         // Handle like button tap
         if player?.timeControlStatus == .playing {
-            player?.pause()
+            self.pause()
+            self.pauseImageView.isHidden = false
         } else if player?.timeControlStatus == .paused {
-            player?.play()
+            self.play()
+            self.pauseImageView.isHidden = true
         }
     }
     
@@ -396,4 +416,5 @@ class DouyinVideoView: VideoView {
         self.avatarView.alpha = alpha
         self.playerProgress.alpha = alpha
     }
+    
 }

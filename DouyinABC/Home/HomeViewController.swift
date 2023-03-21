@@ -123,6 +123,7 @@ extension HomeViewController: PageScrollViewDataSource {
     func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, didEndDisplayAt index: Int) {
         let playerView = view as? DouyinVideoView
         playerView?.pause()
+        playerView?.pauseImageHidden(hidden: true)
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, willBeginDraggingAt index: Int) {
