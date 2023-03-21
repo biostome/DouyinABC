@@ -34,7 +34,7 @@ class HomeViewController: UIViewController {
         return view
     }()
     
-    var videoURLs = [URL]()
+    var videoItems = [AVPlayerItem]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +52,8 @@ class HomeViewController: UIViewController {
               let video5URL = URL(string: "https://v-cdn.zjol.com.cn/276985.mp4") else {
             fatalError("Failed to find video URLs")
         }
-        videoURLs = [video1URL,video2URL,video3URL,video4URL,video5URL]
+        let videoURLs = [video1URL,video2URL,video3URL,video4URL,video5URL]
+        videoItems = videoURLs.map({AVPlayerItem(url: $0)})
         scrollView.reloadData()
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -100,17 +101,25 @@ class HomeViewController: UIViewController {
 extension HomeViewController: PageScrollViewDataSource {
     
     func numberOfViews(in pageScrollView: PageScrollView) -> Int{
-        return videoURLs.count
+        return videoItems.count
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView, viewForItemAt index: Int) -> UIView {
-        let view = DouyinVideoView(frame: view.frame, videoURL: videoURLs[index])
+        let view = DouyinVideoView(frame: view.frame)
         view.backgroundColor = .black
+        // init play
+        if (index == 0 && (view.player.timeControlStatus == .paused || view.player.timeControlStatus == .none)) {
+            view.player.replaceCurrentItem(with: videoItems[index])
+            view.play()
+        }
         return view
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView,view: UIView, didDisplayAt index: Int){
         let playerView = view as? DouyinVideoView
+        if playerView?.player.currentItem != videoItems[index] {
+            playerView?.player.replaceCurrentItem(with: videoItems[index])
+        }
         playerView?.play()
     }
     

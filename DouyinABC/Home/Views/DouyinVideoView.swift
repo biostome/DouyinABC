@@ -132,7 +132,7 @@ class DraggableSlider: UISlider {
 }
 
 
-class VideoView: UIView {
+class DouyinPlayerView: UIView {
     
     public lazy var playerProgress: DraggableSlider = {
         let progress = DraggableSlider(frame: CGRect(x: 0, y: self.frame.height - 60, width: self.frame.width, height: 30))
@@ -162,22 +162,20 @@ class VideoView: UIView {
         return ges
     }()
     
-    private var player: AVQueuePlayer?
-    private var playerLayer: AVPlayerLayer?
-    private var playerItem: AVPlayerItem?
-    private var videoURL: URL
+    lazy var player: AVPlayer = AVPlayer()
     
-    init(frame: CGRect ,videoURL: URL) {
-        self.videoURL = videoURL
+    lazy var playerLayer: AVPlayerLayer = AVPlayerLayer()
+    
+    override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.playerItem = AVPlayerItem(url: self.videoURL)
-        self.player = AVQueuePlayer(playerItem: self.playerItem)
-        self.player?.actionAtItemEnd = .none
         
-        self.playerLayer = AVPlayerLayer(player: self.player)
-        self.playerLayer?.frame = self.bounds
-        self.layer.addSublayer(self.playerLayer!)
+        
+        self.player.actionAtItemEnd = .none
+        self.playerLayer.frame = self.bounds
+        self.playerLayer.player = self.player
+        
+        self.layer.addSublayer(self.playerLayer)
         
         self.addSubview(pauseImageView)
         NSLayoutConstraint.activate([
@@ -202,7 +200,7 @@ class VideoView: UIView {
         
         // Update progress bar
         let interval = CMTimeMake(value: 1, timescale: 30)
-        self.player?.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { [weak self] time in
+        self.player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { [weak self] time in
             guard let self = self else { return }
             self.updateProgressBar(animate: false)
         })
@@ -217,7 +215,7 @@ class VideoView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.playerLayer?.frame = self.bounds
+        self.playerLayer.frame = self.bounds
     }
     
     deinit {
@@ -226,21 +224,21 @@ class VideoView: UIView {
     }
     
     func play() {
-        self.player?.play()
+        self.player.play()
         self.updateProgressBar()
     }
     
     func pause() {
-        self.player?.pause()
+        self.player.pause()
         self.updateProgressBar()
     }
     
     func stop() {
-        self.player?.pause()
+        self.player.pause()
     }
     
     func replay(){
-        self.playerItem?.seek(to: CMTime.zero, completionHandler: { finish in
+        self.player.currentItem?.seek(to: CMTime.zero, completionHandler: { finish in
             self.updateProgressBar()
         })
     }
@@ -256,16 +254,16 @@ class VideoView: UIView {
     
     @objc func sliderValueChanged(_ sender: DraggableSlider) {
         let progress = sender.value
-        let duration = playerItem?.duration.seconds ?? 0.0
+        let duration = self.player.currentItem?.duration.seconds ?? 0.0
         let time = CMTime(seconds: Double(progress) * duration, preferredTimescale: 1000)
-        player?.seek(to: time)
+        player.seek(to: time)
     }
     
     
     private func updateProgressBar(animate: Bool = true) {
-        let duration = CMTimeGetSeconds(self.playerItem?.duration ?? CMTime.zero)
+        let duration = CMTimeGetSeconds(self.player.currentItem?.duration ?? CMTime.zero)
         if duration.isFinite {
-            let currentTime = CMTimeGetSeconds(player?.currentTime() ?? CMTime.zero)
+            let currentTime = CMTimeGetSeconds(self.player.currentItem?.currentTime() ?? .zero)
             let progress = Float(currentTime / duration)
 //            self.playerProgress.setProgress(progress, animated: animate)
             self.playerProgress.setValue(progress, animated: false)
@@ -275,26 +273,26 @@ class VideoView: UIView {
     // Handle single tap gesture
     @objc private func didTapView() {
         // Handle like button tap
-        if player?.timeControlStatus == .playing {
+        if self.player.timeControlStatus == .playing {
             self.pause()
             self.pauseImageView.isHidden = false
-        } else if player?.timeControlStatus == .paused {
+        } else if self.player.timeControlStatus == .paused {
             self.play()
             self.pauseImageView.isHidden = true
         }
     }
 }
 
-extension VideoView: DraggableSliderDelegate {
+extension DouyinPlayerView: DraggableSliderDelegate {
     func draggableSliderTouchesEnded(draggableSlider: DraggableSlider) {
         let progress = draggableSlider.value
-        let duration = playerItem?.duration.seconds ?? 0.0
+        let duration = self.player.currentItem?.duration.seconds ?? 0.0
         let time = CMTime(seconds: Double(progress) * duration, preferredTimescale: 1000)
-        player?.seek(to: time)
+        self.player.seek(to: time)
     }
 }
 
-extension VideoView: UIGestureRecognizerDelegate {
+extension DouyinPlayerView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if let touchedView = touch.view { // 获取点击的视图
             if touchedView == self { // 判断是否是期望的视图
@@ -305,7 +303,7 @@ extension VideoView: UIGestureRecognizerDelegate {
     }
 }
 
-class DouyinVideoView: VideoView {
+class DouyinVideoView: DouyinPlayerView {
     
     private lazy var avatarView: DouyinAvatarView = {
         let view = DouyinAvatarView(frame: .init(origin: .zero, size: .init(width: 50, height: 80)))
@@ -330,8 +328,8 @@ class DouyinVideoView: VideoView {
     private var isCollection = false
     private var displayLink: CADisplayLink?
     
-    override init(frame: CGRect, videoURL: URL) {
-        super.init(frame: frame, videoURL: videoURL)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         addSubview(avatarView)
         addSubview(activityView)
