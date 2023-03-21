@@ -22,7 +22,7 @@ class TabBarViewController: ESTabBarController {
 
 
         
-        let nav1 = UINavigationController(rootViewController: HomeViewController())
+        let nav1 = UINavigationController(rootViewController: NavigationBarViewController())
 
         let v2 = FriendViewController()
         let v3 = UIViewController()

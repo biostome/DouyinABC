@@ -7,10 +7,22 @@
 
 import UIKit
 import AVFoundation
-
+import UIKit
 
 class HomeViewController: UIViewController {
+    
+    var index: Int = 0
 
+    init(index:Int, title: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.title = title
+        self.index = index
+    }
+    
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     lazy var scrollView: PageScrollView = {
         let view = PageScrollView(frame: .zero)
         view.dataSource = self
@@ -26,15 +38,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let menuIcon = UIImage(systemName: "line.horizontal.3")
-        let menuButton = UIBarButtonItem(image: menuIcon, style: .plain, target: self, action: #selector(menuButtonTapped))
-        menuButton.tintColor = UIColor.white
-        navigationItem.leftBarButtonItem = menuButton
-
-        let searchIcon = UIImage(systemName: "magnifyingglass")
-        let searchButton = UIBarButtonItem(image: searchIcon, style: .plain, target: self, action: #selector(searchButtonTapped))
-        searchButton.tintColor = UIColor.white
-        navigationItem.rightBarButtonItem = searchButton
 
         view.addSubview(scrollView)
 
@@ -63,6 +66,9 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if let playerView = self.scrollView.currentView as? DouyinVideoView {
+            playerView.play()
+        }
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithTransparentBackground()
@@ -77,25 +83,16 @@ class HomeViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let playerView = self.scrollView.currentView as? DouyinVideoView {
+            playerView.pause()
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-    }
-    
-    @objc func menuButtonTapped(){
-        let vc = MenuViewController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.view.backgroundColor = .white
-        nav.modalPresentationStyle = .overFullScreen
-        self.present(nav, animated: true)
-    }
-    
-    @objc func searchButtonTapped(){
-        let vc = SearchViewController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.view.backgroundColor = .white
-        nav.modalPresentationStyle = .overFullScreen
-        self.present(nav, animated: true)
     }
     
 }
@@ -103,15 +100,12 @@ class HomeViewController: UIViewController {
 extension HomeViewController: PageScrollViewDataSource {
     
     func numberOfViews(in pageScrollView: PageScrollView) -> Int{
-        videoURLs.count
+        return videoURLs.count
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView, viewForItemAt index: Int) -> UIView {
         let view = DouyinVideoView(frame: view.frame, videoURL: videoURLs[index])
         view.backgroundColor = .black
-        if (index == 0) {
-            view.play()
-        }
         return view
     }
     

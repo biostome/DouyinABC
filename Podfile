@@ -8,6 +8,7 @@ target 'DouyinABC' do
   pod "ESTabBarController-swift"
   # Pods for DouyinABC
   pod 'ActiveLabel'
+  pod 'Parchment', '~> 3.2'
 
   target 'DouyinABCTests' do
     inherit! :search_paths

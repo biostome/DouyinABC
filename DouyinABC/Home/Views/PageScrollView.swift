@@ -23,6 +23,10 @@ class PageScrollView: UIScrollView {
 
     var currentIndex = 0
     var previousIndex = 0
+    
+    var currentView:UIView {
+        return self.subviews[currentIndex]
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

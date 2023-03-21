@@ -29,6 +29,13 @@
 		3A7AD72F29C6BDC4007C66A0 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD72E29C6BDC4007C66A0 /* TabBarViewController.swift */; };
 		3A7AD73529C7312C007C66A0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD73429C7312C007C66A0 /* SearchViewController.swift */; };
 		3A7AD73829C74F8A007C66A0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD73729C74F8A007C66A0 /* MenuViewController.swift */; };
+		3A7AD73D29C95C18007C66A0 /* UIColor+interpolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD73B29C95C18007C66A0 /* UIColor+interpolation.swift */; };
+		3A7AD73E29C95C18007C66A0 /* UIView+constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD73C29C95C18007C66A0 /* UIView+constraints.swift */; };
+		3A7AD74229C9643B007C66A0 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD74129C9643B007C66A0 /* ShopViewController.swift */; };
+		3A7AD74529C96485007C66A0 /* FoloViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD74429C96485007C66A0 /* FoloViewController.swift */; };
+		3A7AD74829C964AB007C66A0 /* LocalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD74729C964AB007C66A0 /* LocalViewController.swift */; };
+		3A7AD74B29C96507007C66A0 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD74A29C96507007C66A0 /* DiscoverViewController.swift */; };
+		3A7AD75229C965AD007C66A0 /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD75129C965AD007C66A0 /* NavigationBarViewController.swift */; };
 		B0B46439E27BACAE1EC71F8A /* Pods_DouyinABCTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D60E75DBE63F8BF6E955A6 /* Pods_DouyinABCTests.framework */; };
 		B9663B1C47B392C9F9F88152 /* Pods_DouyinABC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAD01D93121CCA0090407E /* Pods_DouyinABC.framework */; };
 		DECF0F25B8D9CE01C629DFAD /* Pods_DouyinABC_DouyinABCUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE60C9542F8A2E711EA88531 /* Pods_DouyinABC_DouyinABCUITests.framework */; };
@@ -79,6 +86,13 @@
 		3A7AD72E29C6BDC4007C66A0 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		3A7AD73429C7312C007C66A0 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		3A7AD73729C74F8A007C66A0 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		3A7AD73B29C95C18007C66A0 /* UIColor+interpolation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+interpolation.swift"; sourceTree = "<group>"; };
+		3A7AD73C29C95C18007C66A0 /* UIView+constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+constraints.swift"; sourceTree = "<group>"; };
+		3A7AD74129C9643B007C66A0 /* ShopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
+		3A7AD74429C96485007C66A0 /* FoloViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoloViewController.swift; sourceTree = "<group>"; };
+		3A7AD74729C964AB007C66A0 /* LocalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalViewController.swift; sourceTree = "<group>"; };
+		3A7AD74A29C96507007C66A0 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		3A7AD75129C965AD007C66A0 /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		772EBBE84BC0275CFD357F22 /* Pods-DouyinABC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouyinABC.debug.xcconfig"; path = "Target Support Files/Pods-DouyinABC/Pods-DouyinABC.debug.xcconfig"; sourceTree = "<group>"; };
 		82DE57022F263E567086178B /* Pods-DouyinABC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouyinABC.release.xcconfig"; path = "Target Support Files/Pods-DouyinABC/Pods-DouyinABC.release.xcconfig"; sourceTree = "<group>"; };
 		837F81EEAD338F27F3B87E80 /* Pods-DouyinABC-DouyinABCUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouyinABC-DouyinABCUITests.debug.xcconfig"; path = "Target Support Files/Pods-DouyinABC-DouyinABCUITests/Pods-DouyinABC-DouyinABCUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -142,10 +156,14 @@
 		3A7AD6AF29C44721007C66A0 /* DouyinABC */ = {
 			isa = PBXGroup;
 			children = (
-				3A7AD73929C766BC007C66A0 /* Lib */,
+				3A7AD74929C964D4007C66A0 /* Discover */,
+				3A7AD74629C9649E007C66A0 /* Local */,
+				3A7AD74329C96478007C66A0 /* Folo */,
+				3A7AD73F29C96427007C66A0 /* Shop */,
+				3A7AD73A29C95BF4007C66A0 /* Extension */,
 				3A7AD73629C74F7D007C66A0 /* Menu */,
 				3A7AD73329C73122007C66A0 /* Search */,
-				3A7AD72D29C6BDC4007C66A0 /* TabBarView */,
+				3A7AD72D29C6BDC4007C66A0 /* TabBar */,
 				3A7AD6FD29C5C096007C66A0 /* Mine */,
 				3A7AD6FC29C5C090007C66A0 /* Message */,
 				3A7AD6FB29C5C063007C66A0 /* Friend */,
@@ -190,11 +208,8 @@
 		3A7AD6FA29C5C050007C66A0 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				3A7AD6B429C44721007C66A0 /* HomeViewController.swift */,
-				3A7AD6EF29C5ABA1007C66A0 /* DouyinVideoView.swift */,
-				3A7AD6F129C5AD4B007C66A0 /* DouyinActivityView.swift */,
-				3A7AD6F829C5B717007C66A0 /* DouyinAvatarView.swift */,
-				3A7AD6ED29C5AB09007C66A0 /* DouyinInfoView.swift */,
+				3A7AD74E29C96589007C66A0 /* Controller */,
+				3A7AD74D29C9657E007C66A0 /* Views */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -223,12 +238,12 @@
 			path = Mine;
 			sourceTree = "<group>";
 		};
-		3A7AD72D29C6BDC4007C66A0 /* TabBarView */ = {
+		3A7AD72D29C6BDC4007C66A0 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
 				3A7AD72E29C6BDC4007C66A0 /* TabBarViewController.swift */,
 			);
-			path = TabBarView;
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		3A7AD73329C73122007C66A0 /* Search */ = {
@@ -247,12 +262,66 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
-		3A7AD73929C766BC007C66A0 /* Lib */ = {
+		3A7AD73A29C95BF4007C66A0 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				3A7AD73B29C95C18007C66A0 /* UIColor+interpolation.swift */,
+				3A7AD73C29C95C18007C66A0 /* UIView+constraints.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		3A7AD73F29C96427007C66A0 /* Shop */ = {
+			isa = PBXGroup;
+			children = (
+				3A7AD74129C9643B007C66A0 /* ShopViewController.swift */,
+			);
+			path = Shop;
+			sourceTree = "<group>";
+		};
+		3A7AD74329C96478007C66A0 /* Folo */ = {
+			isa = PBXGroup;
+			children = (
+				3A7AD74429C96485007C66A0 /* FoloViewController.swift */,
+			);
+			path = Folo;
+			sourceTree = "<group>";
+		};
+		3A7AD74629C9649E007C66A0 /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				3A7AD74729C964AB007C66A0 /* LocalViewController.swift */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		3A7AD74929C964D4007C66A0 /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+				3A7AD74A29C96507007C66A0 /* DiscoverViewController.swift */,
+			);
+			path = Discover;
+			sourceTree = "<group>";
+		};
+		3A7AD74D29C9657E007C66A0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				3A7AD6EB29C5AAB8007C66A0 /* PageScrollView.swift */,
+				3A7AD6EF29C5ABA1007C66A0 /* DouyinVideoView.swift */,
+				3A7AD6F129C5AD4B007C66A0 /* DouyinActivityView.swift */,
+				3A7AD6F829C5B717007C66A0 /* DouyinAvatarView.swift */,
+				3A7AD6ED29C5AB09007C66A0 /* DouyinInfoView.swift */,
 			);
-			path = Lib;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3A7AD74E29C96589007C66A0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3A7AD6B429C44721007C66A0 /* HomeViewController.swift */,
+				3A7AD75129C965AD007C66A0 /* NavigationBarViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		717E0921F6799666CB24B80E /* Frameworks */ = {
@@ -517,22 +586,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7AD74829C964AB007C66A0 /* LocalViewController.swift in Sources */,
 				3A7AD6FF29C5C0A3007C66A0 /* FriendViewController.swift in Sources */,
 				3A7AD70129C5C0AA007C66A0 /* MessageViewController.swift in Sources */,
 				3A7AD6BB29C44721007C66A0 /* DouyinABC.xcdatamodeld in Sources */,
 				3A7AD73529C7312C007C66A0 /* SearchViewController.swift in Sources */,
 				3A7AD70329C5C0B2007C66A0 /* MineViewController.swift in Sources */,
 				3A7AD6F029C5ABA1007C66A0 /* DouyinVideoView.swift in Sources */,
+				3A7AD74529C96485007C66A0 /* FoloViewController.swift in Sources */,
 				3A7AD73829C74F8A007C66A0 /* MenuViewController.swift in Sources */,
+				3A7AD73E29C95C18007C66A0 /* UIView+constraints.swift in Sources */,
 				3A7AD6EE29C5AB09007C66A0 /* DouyinInfoView.swift in Sources */,
 				3A7AD6F929C5B717007C66A0 /* DouyinAvatarView.swift in Sources */,
+				3A7AD74229C9643B007C66A0 /* ShopViewController.swift in Sources */,
 				3A7AD6F229C5AD4B007C66A0 /* DouyinActivityView.swift in Sources */,
 				3A7AD6F529C5AD72007C66A0 /* DouyinVideo.swift in Sources */,
 				3A7AD6B529C44721007C66A0 /* HomeViewController.swift in Sources */,
 				3A7AD6B129C44721007C66A0 /* AppDelegate.swift in Sources */,
 				3A7AD6EC29C5AAB8007C66A0 /* PageScrollView.swift in Sources */,
 				3A7AD72F29C6BDC4007C66A0 /* TabBarViewController.swift in Sources */,
+				3A7AD74B29C96507007C66A0 /* DiscoverViewController.swift in Sources */,
 				3A7AD6B329C44721007C66A0 /* SceneDelegate.swift in Sources */,
+				3A7AD73D29C95C18007C66A0 /* UIColor+interpolation.swift in Sources */,
+				3A7AD75229C965AD007C66A0 /* NavigationBarViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
