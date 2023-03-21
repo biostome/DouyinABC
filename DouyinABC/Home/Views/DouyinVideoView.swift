@@ -134,25 +134,43 @@ class DraggableSlider: UISlider {
 
 class VideoView: UIView {
     
-    public var playerProgress: DraggableSlider!
+    public lazy var playerProgress: DraggableSlider = {
+        let progress = DraggableSlider(frame: CGRect(x: 0, y: self.frame.height - 60, width: self.frame.width, height: 30))
+        progress.backgroundColor = UIColor.white.withAlphaComponent(0.4)
+        progress.tintColor = UIColor.white
+        progress.minimumValue = 0
+        progress.layer.cornerRadius = 2.5
+        progress.maximumValue = 1
+        progress.value = 0.0
+        progress.delegate = self
+        return progress
+    }()
+    public lazy var pauseImageView: UIImageView = {
+        let view = UIImageView(image: UIImage(systemName:"play.fill"))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.tintColor = .white
+        view.alpha = 0.3
+        view.isHidden = true
+        return view
+    }()
+    
+    public lazy var tapGestureRecognizer = {
+        let ges = UITapGestureRecognizer(target: self, action: #selector(didTapView))
+        ges.numberOfTapsRequired = 1
+        ges.delegate = self
+        return ges
+    }()
+    
     private var player: AVQueuePlayer?
     private var playerLayer: AVPlayerLayer?
     private var playerItem: AVPlayerItem?
     private var videoURL: URL
-    private var pauseImageView: UIImageView = UIImageView(image: UIImage(systemName:"play.fill"))
     
     init(frame: CGRect ,videoURL: URL) {
         self.videoURL = videoURL
         super.init(frame: frame)
-        self.playerProgress = DraggableSlider(frame: CGRect(x: 0, y: self.frame.height - 60, width: self.frame.width, height: 30))
-        self.playerProgress.backgroundColor = UIColor.white.withAlphaComponent(0.4)
-        self.playerProgress?.tintColor = UIColor.white
-        self.playerProgress.minimumValue = 0
-        self.playerProgress.layer.cornerRadius = 2.5
-        self.playerProgress.maximumValue = 1
-        self.playerProgress.value = 0.0
-//        self.playerProgress.addTarget(self, action: #selector(sliderValueChanged(_:)), for: .valueChanged)
-        self.playerProgress.delegate = self
+        
         self.playerItem = AVPlayerItem(url: self.videoURL)
         self.player = AVQueuePlayer(playerItem: self.playerItem)
         self.player?.actionAtItemEnd = .none
@@ -162,11 +180,6 @@ class VideoView: UIView {
         self.layer.addSublayer(self.playerLayer!)
         
         self.addSubview(pauseImageView)
-        self.pauseImageView.translatesAutoresizingMaskIntoConstraints = false
-        self.pauseImageView.backgroundColor = .clear
-        self.pauseImageView.tintColor = .white
-        self.pauseImageView.alpha = 0.3
-        self.pauseImageView.isHidden = true
         NSLayoutConstraint.activate([
             self.pauseImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             self.pauseImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -194,20 +207,7 @@ class VideoView: UIView {
             self.updateProgressBar(animate: false)
         })
         
-        
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapView))
-        tapGestureRecognizer.numberOfTapsRequired = 1
-        tapGestureRecognizer.delegate = self
-        
-        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTapView))
-        doubleTapGestureRecognizer.numberOfTapsRequired = 2
-        doubleTapGestureRecognizer.delegate = self
-        
-        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
-        
         addGestureRecognizer(tapGestureRecognizer)
-        addGestureRecognizer(doubleTapGestureRecognizer)
-        
         
     }
     
@@ -282,10 +282,6 @@ class VideoView: UIView {
             self.play()
             self.pauseImageView.isHidden = true
         }
-    }
-    
-    @objc public func didDoubleTapView(sender: UIGestureRecognizer){
-        
     }
 }
 
@@ -380,6 +376,14 @@ class DouyinVideoView: VideoView {
                 
             }))
         }
+        
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didDoubleTapView))
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        doubleTapGestureRecognizer.delegate = self
+        
+        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
+        
+        addGestureRecognizer(doubleTapGestureRecognizer)
     }
     
     required init?(coder: NSCoder) {
@@ -404,8 +408,7 @@ class DouyinVideoView: VideoView {
         
     }
     
-    override func didDoubleTapView(sender: UIGestureRecognizer) {
-        super.didDoubleTapView(sender: sender)
+    @objc func didDoubleTapView(sender: UIGestureRecognizer) {
         isLiked.toggle()
         activityView.likeButton.isSelected = isLiked
     }
