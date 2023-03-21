@@ -14,8 +14,8 @@ class DouyinActivityView: UIView {
     
     lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        button.setImage(UIImage(systemName: "heart", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setImage(UIImage(systemName: "heart.fill", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         button.setImage(UIImage(systemName: "heart.fill", withConfiguration: config)?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .selected)
         button.backgroundColor = UIColor.clear
         button.tintColor = UIColor.clear
@@ -25,29 +25,31 @@ class DouyinActivityView: UIView {
     lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        button.setImage(UIImage(systemName: "bubble.left", withConfiguration: config), for: .normal)
-        button.tintColor = .white
-        return button
-    }()
-    
-    lazy var shareButton: UIButton = {
-        let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        button.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis.message.fill", withConfiguration: config), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis.message.fill", withConfiguration: config)?.withTintColor(.systemYellow, renderingMode: .alwaysOriginal), for: .selected)
         button.tintColor = .white
         return button
     }()
     
     lazy var collectButton: UIButton = {
         let button = UIButton(type: .custom)
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        button.setImage(UIImage(systemName: "bookmark", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
-        button.setImage(UIImage(systemName: "bookmark.fill", withConfiguration: config)?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .selected)
+        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .medium)
+        button.setImage(UIImage(systemName: "star.fill", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "star.fill", withConfiguration: config)?.withTintColor(.systemYellow, renderingMode: .alwaysOriginal), for: .selected)
         button.backgroundColor = UIColor.clear
         button.tintColor = UIColor.clear
         button.sizeToFit()
         return button
     }()
+    
+    lazy var shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        button.setImage(UIImage(systemName: "arrowshape.turn.up.right.fill", withConfiguration: config), for: .normal)
+        button.tintColor = .white
+        return button
+    }()
+    
     
     lazy var likeLabel: UILabel = {
         let lb = UILabel()
