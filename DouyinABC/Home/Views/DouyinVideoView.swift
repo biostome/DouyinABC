@@ -174,6 +174,7 @@ class DouyinPlayerView: UIView {
         self.player.actionAtItemEnd = .none
         self.playerLayer.frame = self.bounds
         self.playerLayer.player = self.player
+        self.playerLayer.videoGravity = .resizeAspectFill
         
         self.layer.addSublayer(self.playerLayer)
         
@@ -324,6 +325,11 @@ class DouyinVideoView: DouyinPlayerView {
         return view
     }()
     
+    public lazy var musicAlbumView: MusicAlbumView = {
+        let view = MusicAlbumView(frame: .zero)
+        return view
+    }()
+    
     private var isLiked = false
     private var isCollection = false
     private var displayLink: CADisplayLink?
@@ -334,11 +340,20 @@ class DouyinVideoView: DouyinPlayerView {
         addSubview(avatarView)
         addSubview(activityView)
         addSubview(infoView)
+        addSubview(musicAlbumView)
+        
+        musicAlbumView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            musicAlbumView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            musicAlbumView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            musicAlbumView.widthAnchor.constraint(equalToConstant: 50),
+            musicAlbumView.heightAnchor.constraint(equalToConstant: 50),
+        ])
         
         activityView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             activityView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            activityView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            activityView.bottomAnchor.constraint(equalTo: musicAlbumView.topAnchor, constant: -20),
             activityView.widthAnchor.constraint(equalToConstant: 40)
         ])
         
@@ -357,6 +372,7 @@ class DouyinVideoView: DouyinPlayerView {
             avatarView.widthAnchor.constraint(equalToConstant: 60),
             avatarView.heightAnchor.constraint(equalToConstant: 60)
         ])
+        
         
         // 添加选中文本时的回调
         infoView.contentLabel.handleMentionTap { mention in

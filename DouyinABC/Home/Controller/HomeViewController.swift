@@ -44,16 +44,35 @@ class HomeViewController: UIViewController {
         // Append additional URLs
 //
 //
-//
-        guard let video1URL = URL(string: "https://www.w3schools.com/html/movie.mp4"),
-              let video2URL = URL(string: "https://media.w3.org/2010/05/sintel/trailer.mp4"),
-              let video3URL = URL(string: "https://v-cdn.zjol.com.cn/276982.mp4"),
-              let video4URL = URL(string: "https://v-cdn.zjol.com.cn/276984.mp4"),
-              let video5URL = URL(string: "https://v-cdn.zjol.com.cn/276985.mp4") else {
-            fatalError("Failed to find video URLs")
-        }
-        let videoURLs = [video1URL,video2URL,video3URL,video4URL,video5URL]
-        videoItems = videoURLs.map({AVPlayerItem(url: $0)})
+
+        let URLs:[String] = [
+            "https://www.w3schools.com/html/movie.mp4",
+            "https://media.w3.org/2010/05/sintel/trailer.mp4",
+            "https://v-cdn.zjol.com.cn/276982.mp4",
+            "https://v-cdn.zjol.com.cn/276984.mp4",
+            "http://vfx.mtime.cn/Video/2021/07/10/mp4/210710171112971120.mp4",
+            "http://vfx.mtime.cn/Video/2021/07/10/mp4/210710122716702150.mp4",
+            "http://vfx.mtime.cn/Video/2021/07/10/mp4/210710095541348171.mp4",
+            "http://vfx.mtime.cn/Video/2021/07/10/mp4/210710094507540173.mp4",
+            "http://vfx.mtime.cn/Video/2021/07/09/mp4/210709224656837141.mp4",
+            "http://vfx.mtime.cn/Video/2021/07/09/mp4/210709172715355157.mp4",
+            "https://sample-videos.com/video123/mkv/720/big_buck_bunny_720p_1mb.mkv",
+            "https://sample-videos.com/video123/mkv/720/big_buck_bunny_720p_2mb.mkv",
+            "https://sample-videos.com/video123/mkv/720/big_buck_bunny_720p_5mb.mkv",
+            "https://sample-videos.com/video123/mkv/720/big_buck_bunny_720p_10mb.mkv",
+            "https://sample-videos.com/video123/3gp/144/big_buck_bunny_144p_1mb.3gp",
+            "https://sample-videos.com/video123/3gp/144/big_buck_bunny_144p_2mb.3gp",
+            "https://sample-videos.com/video123/3gp/144/big_buck_bunny_144p_5mb.3gp",
+            "https://sample-videos.com/video123/3gp/144/big_buck_bunny_144p_10mb.3gp",
+        ]
+
+        
+        videoItems = URLs.compactMap({ str in
+            if let u = URL(string: str) {
+                return AVPlayerItem(url: u)
+            }
+            return nil
+        })
         scrollView.reloadData()
         
         scrollView.translatesAutoresizingMaskIntoConstraints = false

@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,11 +11,29 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <view key="view" contentMode="scaleToFill" id="ohi-li-zsQ">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchImage" translatesAutoresizingMaskIntoConstraints="NO" id="Vbi-bm-2yn">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="douyin.logo.splash" translatesAutoresizingMaskIntoConstraints="NO" id="ObQ-bO-D83">
+                                <rect key="frame" x="137" y="167" width="119" height="201"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="54H-8e-eOs"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Vbi-bm-2yn" firstAttribute="centerX" secondItem="ohi-li-zsQ" secondAttribute="centerX" id="1oE-bt-Gah"/>
+                            <constraint firstItem="Vbi-bm-2yn" firstAttribute="leading" secondItem="ohi-li-zsQ" secondAttribute="leading" id="F2e-D7-D8s"/>
+                            <constraint firstItem="Vbi-bm-2yn" firstAttribute="top" secondItem="ObQ-bO-D83" secondAttribute="bottom" constant="-368" id="Lq7-1b-MK0"/>
+                            <constraint firstItem="Vbi-bm-2yn" firstAttribute="centerY" secondItem="ohi-li-zsQ" secondAttribute="centerY" id="ROV-Rl-ya1"/>
+                            <constraint firstAttribute="trailing" secondItem="Vbi-bm-2yn" secondAttribute="trailing" id="Ytx-V1-lhx"/>
+                            <constraint firstItem="ObQ-bO-D83" firstAttribute="centerX" secondItem="ohi-li-zsQ" secondAttribute="centerX" id="ao2-uN-f3N"/>
+                            <constraint firstAttribute="bottom" secondItem="Vbi-bm-2yn" secondAttribute="bottom" id="obe-In-Jx8"/>
+                            <constraint firstItem="Vbi-bm-2yn" firstAttribute="top" secondItem="ohi-li-zsQ" secondAttribute="top" id="sr3-J8-0Rv"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -22,4 +41,8 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="douyin.logo.splash" width="119" height="201.33332824707031"/>
+        <image name="launchImage" width="375" height="664.66668701171875"/>
+    </resources>
 </document>
