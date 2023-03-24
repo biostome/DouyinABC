@@ -540,6 +540,8 @@ class DouyinVideoView: DouyinPlayerView {
         self.avatarView.alpha = alpha
         self.playerProgress.alpha = alpha
         self.activityViewStack.alpha = alpha
+        self.musicTitleBar.alpha = alpha
+        self.musicAlbumView.alpha = alpha
     }
     
 }
