@@ -330,6 +330,11 @@ class DouyinVideoView: DouyinPlayerView {
         return view
     }()
     
+    public lazy var musicTitleBar: MusicTitleBar = {
+        let view = MusicTitleBar(frame: .zero)
+        return view
+    }()
+    
     private var isLiked = false
     private var isCollection = false
     private var displayLink: CADisplayLink?
@@ -341,6 +346,7 @@ class DouyinVideoView: DouyinPlayerView {
         addSubview(activityView)
         addSubview(infoView)
         addSubview(musicAlbumView)
+        addSubview(musicTitleBar)
         
         musicAlbumView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -348,6 +354,14 @@ class DouyinVideoView: DouyinPlayerView {
             musicAlbumView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
             musicAlbumView.widthAnchor.constraint(equalToConstant: 50),
             musicAlbumView.heightAnchor.constraint(equalToConstant: 50),
+        ])
+        
+        musicTitleBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            musicTitleBar.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
+            musicTitleBar.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            musicTitleBar.widthAnchor.constraint(equalToConstant: self.bounds.width * 0.6),
+            musicTitleBar.heightAnchor.constraint(equalToConstant: 20),
         ])
         
         activityView.translatesAutoresizingMaskIntoConstraints = false

@@ -9,6 +9,8 @@ target 'DouyinABC' do
   # Pods for DouyinABC
   pod 'ActiveLabel'
   pod 'Parchment', '~> 3.2'
+  pod 'MarqueeLabel'
+
 
   target 'DouyinABCTests' do
     inherit! :search_paths

@@ -33,30 +33,10 @@ class MusicAlbumView: UIView {
         return layer
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        self.layer.addSublayer(self.airplaneContainerLayer)
-        self.layer.addSublayer(self.albumLayer)
-        self.startAnimations()
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.albumLayer.frame = self.bounds
-        self.airplaneContainerLayer.frame = self.bounds
-    }
-    
-    public func startAnimations(){
-        self.airplaneContainerLayer.sublayers?.forEach({$0.removeFromSuperlayer()})
+    private lazy var animateGroup: [CAShapeLayer]  = {
         let airplanes = ["airplane1","airplane2","airplane2"]
         let delayTimes = [0.0, 1.0, 2.0]
-        zip(airplanes, delayTimes).map { (name, delay) in
+        let anim: [CAShapeLayer] = zip(airplanes, delayTimes).map { (name, delay) in
             let group = CAAnimationGroup()
             group.duration = 3
             group.beginTime = CACurrentMediaTime() + delay
@@ -97,7 +77,31 @@ class MusicAlbumView: UIView {
             shapeLayer.frame = .init(x: begin.x, y: begin.y, width: 10, height: 10)
             shapeLayer.add(group, forKey: nil)
             return shapeLayer
-        }.forEach { shapeLayer in
+        }
+        return anim
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.layer.addSublayer(self.airplaneContainerLayer)
+        self.layer.addSublayer(self.albumLayer)
+        self.startAnimations()
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.albumLayer.frame = self.bounds
+        self.airplaneContainerLayer.frame = self.bounds
+    }
+    
+    public func startAnimations(){
+        self.animateGroup.forEach { shapeLayer in
             self.airplaneContainerLayer.addSublayer(shapeLayer)
         }
         

@@ -37,6 +37,7 @@
 		3A7AD74B29C96507007C66A0 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD74A29C96507007C66A0 /* DiscoverViewController.swift */; };
 		3A7AD75229C965AD007C66A0 /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD75129C965AD007C66A0 /* NavigationBarViewController.swift */; };
 		3A7AD75529C9E945007C66A0 /* MusicAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD75429C9E945007C66A0 /* MusicAlbumView.swift */; };
+		3A7AD75729CC22B2007C66A0 /* MusicTitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD75629CC22B2007C66A0 /* MusicTitleBar.swift */; };
 		B0B46439E27BACAE1EC71F8A /* Pods_DouyinABCTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87D60E75DBE63F8BF6E955A6 /* Pods_DouyinABCTests.framework */; };
 		B9663B1C47B392C9F9F88152 /* Pods_DouyinABC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2CAD01D93121CCA0090407E /* Pods_DouyinABC.framework */; };
 		DECF0F25B8D9CE01C629DFAD /* Pods_DouyinABC_DouyinABCUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE60C9542F8A2E711EA88531 /* Pods_DouyinABC_DouyinABCUITests.framework */; };
@@ -95,6 +96,7 @@
 		3A7AD74A29C96507007C66A0 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		3A7AD75129C965AD007C66A0 /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		3A7AD75429C9E945007C66A0 /* MusicAlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicAlbumView.swift; sourceTree = "<group>"; };
+		3A7AD75629CC22B2007C66A0 /* MusicTitleBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicTitleBar.swift; sourceTree = "<group>"; };
 		772EBBE84BC0275CFD357F22 /* Pods-DouyinABC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouyinABC.debug.xcconfig"; path = "Target Support Files/Pods-DouyinABC/Pods-DouyinABC.debug.xcconfig"; sourceTree = "<group>"; };
 		82DE57022F263E567086178B /* Pods-DouyinABC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouyinABC.release.xcconfig"; path = "Target Support Files/Pods-DouyinABC/Pods-DouyinABC.release.xcconfig"; sourceTree = "<group>"; };
 		837F81EEAD338F27F3B87E80 /* Pods-DouyinABC-DouyinABCUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DouyinABC-DouyinABCUITests.debug.xcconfig"; path = "Target Support Files/Pods-DouyinABC-DouyinABCUITests/Pods-DouyinABC-DouyinABCUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 				3A7AD6F829C5B717007C66A0 /* DouyinAvatarView.swift */,
 				3A7AD6ED29C5AB09007C66A0 /* DouyinInfoView.swift */,
 				3A7AD75429C9E945007C66A0 /* MusicAlbumView.swift */,
+				3A7AD75629CC22B2007C66A0 /* MusicTitleBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				3A7AD75529C9E945007C66A0 /* MusicAlbumView.swift in Sources */,
 				3A7AD6B329C44721007C66A0 /* SceneDelegate.swift in Sources */,
 				3A7AD73D29C95C18007C66A0 /* UIColor+interpolation.swift in Sources */,
+				3A7AD75729CC22B2007C66A0 /* MusicTitleBar.swift in Sources */,
 				3A7AD75229C965AD007C66A0 /* NavigationBarViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
