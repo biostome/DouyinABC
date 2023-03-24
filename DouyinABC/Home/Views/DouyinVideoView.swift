@@ -10,6 +10,37 @@ import UIKit
 import AVKit
 import ActiveLabel
 
+
+class VerticalButton: UIButton {
+    
+    let imageTopMargin = 0.0
+    let textTopMargin = 0.0
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Adjust image position
+        let imageSize = imageView?.frame.size ?? CGSize.zero
+        let imageY = (bounds.size.height - imageSize.height - titleLabel!.frame.size.height - imageTopMargin - textTopMargin) / 2.0
+        let imageX = (bounds.size.width - imageSize.width) / 2.0
+        imageView?.frame = CGRect(x: imageX, y: imageY, width: imageSize.width, height: imageSize.height)
+        
+        // Adjust title position
+        let titleSize = titleLabel?.frame.size ?? CGSize.zero
+        let titleY = imageY + imageSize.height + imageTopMargin + textTopMargin
+        let titleX = (bounds.size.width - titleSize.width) / 2.0
+        titleLabel?.frame = CGRect(x: titleX, y: titleY, width: self.bounds.size.width, height: titleSize.height)
+        
+
+    }
+    
+    override var intrinsicContentSize: CGSize{
+        return .init(width: CGFloat.maximum(self.imageView?.frame.width ?? 0, self.titleLabel?.frame.width ?? 0), height: (self.imageView?.frame.height ?? 0) + (self.titleLabel?.frame.height ?? 0))
+    }
+    
+}
+
+
 protocol DraggableSliderDelegate {
     func draggableSliderTouchesEnded(draggableSlider: DraggableSlider)
 }
@@ -311,15 +342,6 @@ class DouyinVideoView: DouyinPlayerView {
         return view
     }()
     
-    private lazy var activityView: DouyinActivityView = {
-        let view = DouyinActivityView(frame: .zero)
-        view.likeButton.addTarget(self, action: #selector(likeButtonTapped(sender: )), for: .touchUpInside)
-        view.commentButton.addTarget(self, action: #selector(commentButtonTapped(sender: )), for: .touchUpInside)
-        view.collectButton.addTarget(self, action: #selector(collectButtonTapped(sender: )), for: .touchUpInside)
-        view.shareButton.addTarget(self, action: #selector(shareButtonTapped(sender: )), for: .touchUpInside)
-        return view
-    }()
-    
     private lazy var infoView: DouyinInfoView = {
         let view = DouyinInfoView()
         return view
@@ -335,6 +357,74 @@ class DouyinVideoView: DouyinPlayerView {
         return view
     }()
     
+    
+    public lazy var likeButton: VerticalButton = {
+        let button = VerticalButton(frame: .zero)
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setImage(UIImage(systemName: "heart.fill", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "heart.fill", withConfiguration: config)?.withTintColor(.systemPink, renderingMode: .alwaysOriginal), for: .selected)
+        button.backgroundColor = UIColor.clear
+        button.tintColor = UIColor.clear
+        button.setTitle("0", for: .normal)
+        button.addTarget(self, action: #selector(likeButtonTapped(sender: )), for: .touchUpInside)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.sizeToFit()
+        return button
+    }()
+    
+    public lazy var commentButton: VerticalButton = {
+        let button = VerticalButton(frame: .zero)
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setImage(UIImage(systemName: "ellipsis.message.fill", withConfiguration: config), for: .normal)
+        button.setImage(UIImage(systemName: "ellipsis.message.fill", withConfiguration: config)?.withTintColor(.systemYellow, renderingMode: .alwaysOriginal), for: .selected)
+        button.tintColor = .white
+        button.setTitle("0", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(commentButtonTapped(sender: )), for: .touchUpInside)
+        return button
+    }()
+    
+    public lazy var collectButton: VerticalButton = {
+        let button = VerticalButton(frame: .zero)
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setImage(UIImage(systemName: "star.fill", withConfiguration: config)?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "star.fill", withConfiguration: config)?.withTintColor(.systemYellow, renderingMode: .alwaysOriginal), for: .selected)
+        button.backgroundColor = UIColor.clear
+        button.tintColor = UIColor.clear
+        button.setTitle("0", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.sizeToFit()
+        button.addTarget(self, action: #selector(collectButtonTapped(sender: )), for: .touchUpInside)
+        return button
+    }()
+    
+    public lazy var shareButton: VerticalButton = {
+        let button = VerticalButton(frame: .zero)
+        let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .medium)
+        button.setImage(UIImage(systemName: "arrowshape.turn.up.right.fill", withConfiguration: config), for: .normal)
+        button.addTarget(self, action: #selector(shareButtonTapped(sender: )), for: .touchUpInside)
+        button.setTitle("0", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.tintColor = .white
+        button.sizeToFit()
+        return button
+    }()
+    
+    public lazy var infoViewStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
+    }()
+    
+    public lazy var activityViewStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 20
+        return stack
+    }()
+    
     private var isLiked = false
     private var isCollection = false
     private var displayLink: CADisplayLink?
@@ -343,46 +433,49 @@ class DouyinVideoView: DouyinPlayerView {
         super.init(frame: frame)
         
         addSubview(avatarView)
-        addSubview(activityView)
-        addSubview(infoView)
+        addSubview(activityViewStack)
         addSubview(musicAlbumView)
-        addSubview(musicTitleBar)
+        addSubview(infoViewStack)
+        
+        infoViewStack.addArrangedSubview(infoView)
+        infoViewStack.addArrangedSubview(musicTitleBar)
+        
+        activityViewStack.addArrangedSubview(likeButton)
+        activityViewStack.addArrangedSubview(commentButton)
+        activityViewStack.addArrangedSubview(collectButton)
+        activityViewStack.addArrangedSubview(shareButton)
+        
+        
+        musicTitleBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            musicTitleBar.heightAnchor.constraint(equalToConstant: 20)
+        ])
+        
+        infoViewStack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            infoViewStack.leftAnchor.constraint(equalTo: leftAnchor, constant: 8),
+            infoViewStack.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            infoViewStack.rightAnchor.constraint(equalTo: rightAnchor, constant: -bounds.width * 0.2),
+        ])
         
         musicAlbumView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             musicAlbumView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
             musicAlbumView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30),
-            musicAlbumView.widthAnchor.constraint(equalToConstant: 50),
-            musicAlbumView.heightAnchor.constraint(equalToConstant: 50),
+            musicAlbumView.widthAnchor.constraint(equalToConstant: 40),
+            musicAlbumView.heightAnchor.constraint(equalToConstant: 40),
         ])
         
-        musicTitleBar.translatesAutoresizingMaskIntoConstraints = false
+        activityViewStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            musicTitleBar.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
-            musicTitleBar.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            musicTitleBar.widthAnchor.constraint(equalToConstant: self.bounds.width * 0.6),
-            musicTitleBar.heightAnchor.constraint(equalToConstant: 20),
-        ])
-        
-        activityView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            activityView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            activityView.bottomAnchor.constraint(equalTo: musicAlbumView.topAnchor, constant: -20),
-            activityView.widthAnchor.constraint(equalToConstant: 40)
-        ])
-        
-        
-        infoView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            infoView.leftAnchor.constraint(equalTo: leftAnchor, constant: 8),
-            infoView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            infoView.rightAnchor.constraint(equalTo: rightAnchor, constant: -bounds.width * 0.2),
+            activityViewStack.bottomAnchor.constraint(equalTo: musicAlbumView.topAnchor, constant: -10),
+            activityViewStack.centerXAnchor.constraint(equalTo: musicAlbumView.centerXAnchor)
         ])
         
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            avatarView.centerXAnchor.constraint(equalTo: activityView.centerXAnchor),
-            avatarView.bottomAnchor.constraint(equalTo: activityView.topAnchor, constant: -10),
+            avatarView.centerXAnchor.constraint(equalTo: activityViewStack.centerXAnchor),
+            avatarView.bottomAnchor.constraint(equalTo: activityViewStack.topAnchor, constant: -10),
             avatarView.widthAnchor.constraint(equalToConstant: 60),
             avatarView.heightAnchor.constraint(equalToConstant: 60)
         ])
@@ -420,12 +513,12 @@ class DouyinVideoView: DouyinPlayerView {
     
     @objc private func likeButtonTapped(sender: UIButton) {
         isLiked.toggle()
-        activityView.likeButton.isSelected = isLiked
+        likeButton.isSelected = isLiked
     }
     
     @objc private func collectButtonTapped(sender: UIButton) {
         isCollection.toggle()
-        activityView.collectButton.isSelected = isCollection
+        collectButton.isSelected = isCollection
     }
     
     @objc private func commentButtonTapped(sender: UIButton) {
@@ -438,11 +531,11 @@ class DouyinVideoView: DouyinPlayerView {
     
     @objc func didDoubleTapView(sender: UIGestureRecognizer) {
         isLiked.toggle()
-        activityView.likeButton.isSelected = isLiked
+        likeButton.isSelected = isLiked
     }
     
     func transparentSubviews(alpha: CGFloat){
-        self.activityView.alpha = alpha
+        self.activityViewStack.alpha = alpha
         self.infoView.alpha = alpha
         self.avatarView.alpha = alpha
         self.playerProgress.alpha = alpha

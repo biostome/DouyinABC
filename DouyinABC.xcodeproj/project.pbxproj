@@ -20,7 +20,6 @@
 		3A7AD6EC29C5AAB8007C66A0 /* PageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6EB29C5AAB8007C66A0 /* PageScrollView.swift */; };
 		3A7AD6EE29C5AB09007C66A0 /* DouyinInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6ED29C5AB09007C66A0 /* DouyinInfoView.swift */; };
 		3A7AD6F029C5ABA1007C66A0 /* DouyinVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6EF29C5ABA1007C66A0 /* DouyinVideoView.swift */; };
-		3A7AD6F229C5AD4B007C66A0 /* DouyinActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6F129C5AD4B007C66A0 /* DouyinActivityView.swift */; };
 		3A7AD6F529C5AD72007C66A0 /* DouyinVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6F429C5AD72007C66A0 /* DouyinVideo.swift */; };
 		3A7AD6F929C5B717007C66A0 /* DouyinAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6F829C5B717007C66A0 /* DouyinAvatarView.swift */; };
 		3A7AD6FF29C5C0A3007C66A0 /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AD6FE29C5C0A3007C66A0 /* FriendViewController.swift */; };
@@ -79,7 +78,6 @@
 		3A7AD6EB29C5AAB8007C66A0 /* PageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageScrollView.swift; sourceTree = "<group>"; };
 		3A7AD6ED29C5AB09007C66A0 /* DouyinInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinInfoView.swift; sourceTree = "<group>"; };
 		3A7AD6EF29C5ABA1007C66A0 /* DouyinVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinVideoView.swift; sourceTree = "<group>"; };
-		3A7AD6F129C5AD4B007C66A0 /* DouyinActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinActivityView.swift; sourceTree = "<group>"; };
 		3A7AD6F429C5AD72007C66A0 /* DouyinVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinVideo.swift; sourceTree = "<group>"; };
 		3A7AD6F829C5B717007C66A0 /* DouyinAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DouyinAvatarView.swift; sourceTree = "<group>"; };
 		3A7AD6FE29C5C0A3007C66A0 /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
@@ -312,7 +310,6 @@
 			children = (
 				3A7AD6EB29C5AAB8007C66A0 /* PageScrollView.swift */,
 				3A7AD6EF29C5ABA1007C66A0 /* DouyinVideoView.swift */,
-				3A7AD6F129C5AD4B007C66A0 /* DouyinActivityView.swift */,
 				3A7AD6F829C5B717007C66A0 /* DouyinAvatarView.swift */,
 				3A7AD6ED29C5AB09007C66A0 /* DouyinInfoView.swift */,
 				3A7AD75429C9E945007C66A0 /* MusicAlbumView.swift */,
@@ -605,7 +602,6 @@
 				3A7AD6EE29C5AB09007C66A0 /* DouyinInfoView.swift in Sources */,
 				3A7AD6F929C5B717007C66A0 /* DouyinAvatarView.swift in Sources */,
 				3A7AD74229C9643B007C66A0 /* ShopViewController.swift in Sources */,
-				3A7AD6F229C5AD4B007C66A0 /* DouyinActivityView.swift in Sources */,
 				3A7AD6F529C5AD72007C66A0 /* DouyinVideo.swift in Sources */,
 				3A7AD6B529C44721007C66A0 /* HomeViewController.swift in Sources */,
 				3A7AD6B129C44721007C66A0 /* AppDelegate.swift in Sources */,
