@@ -111,7 +111,7 @@ class DouyinInfoView: UIView {
             
             dateLabel.centerYAnchor.constraint(equalTo: authorNameButton.centerYAnchor),
             dateLabel.leftAnchor.constraint(equalTo: authorNameButton.rightAnchor, constant: 5),
-            dateLabel.rightAnchor.constraint(greaterThanOrEqualTo: rightAnchor, constant: 5)
+//            dateLabel.rightAnchor.constraint(greaterThanOrEqualTo: rightAnchor, constant: 5)
         ])
         
         let text = "This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags.This is a text with @mentions and #hashtags. "

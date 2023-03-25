@@ -42,13 +42,11 @@ class MusicTitleBar: UIView {
     }()
     
     lazy var marqueeLabel: MarqueeLabel = {
-        let carouselView = MarqueeLabel(frame: .zero)
+        let carouselView = MarqueeLabel(frame: .init(x: 0, y: 0, width: 100, height: 40))
         carouselView.backgroundColor = .clear
         
         // Continuous Type
-        carouselView.tag = 101
-        carouselView.lineBreakMode = .byTruncatingHead
-        carouselView.speed = .duration(3.5)
+        
         return carouselView
     }()
     
@@ -79,7 +77,7 @@ class MusicTitleBar: UIView {
         marqueeLabel.fadeLength = 0
         marqueeLabel.leadingBuffer = 40
         marqueeLabel.trailingBuffer = 40
-        marqueeLabel.text = "坏女孩 （Cover徐良）"
+        marqueeLabel.text = "坏女孩 （Cover徐良）    坏女孩 （Cover徐良）    坏女孩 （Cover徐良）"
         marqueeLabel.textColor = .white
         marqueeLabel.font = UIFont.systemFont(ofSize: 14.0)
         marqueeLabel.backgroundColor = .clear
