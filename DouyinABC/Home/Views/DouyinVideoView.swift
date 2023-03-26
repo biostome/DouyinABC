@@ -16,24 +16,54 @@ class VerticalButton: UIButton {
     let imageTopMargin = 0.0
     let textTopMargin = 0.0
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+//        self.imageView?.translatesAutoresizingMaskIntoConstraints = false
+//        self.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
+//
+//
+//
+//
+//        if let imageView = self.imageView, let titleLabel = self.titleLabel {
+//            NSLayoutConstraint.activate([
+//                imageView.topAnchor.constraint(equalTo: topAnchor),
+//                imageView.leftAnchor.constraint(equalTo: leftAnchor),
+//                imageView.rightAnchor.constraint(equalTo: rightAnchor)
+//            ])
+//            NSLayoutConstraint.activate([
+//                titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
+//                titleLabel.leftAnchor.constraint(equalTo: leftAnchor),
+//                titleLabel.rightAnchor.constraint(equalTo: rightAnchor),
+//                titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
+//            ])
+//
+//        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         // Adjust image position
         let imageSize = imageView?.frame.size ?? CGSize.zero
         let imageY = (bounds.size.height - imageSize.height - titleLabel!.frame.size.height - imageTopMargin - textTopMargin) / 2.0
         let imageX = (bounds.size.width - imageSize.width) / 2.0
         imageView?.frame = CGRect(x: imageX, y: imageY, width: imageSize.width, height: imageSize.height)
-        
+
         // Adjust title position
         let titleSize = titleLabel?.frame.size ?? CGSize.zero
         let titleY = imageY + imageSize.height + imageTopMargin + textTopMargin
         let titleX = (bounds.size.width - titleSize.width) / 2.0
-        titleLabel?.frame = CGRect(x: titleX, y: titleY, width: self.bounds.size.width, height: titleSize.height)
-        
+        titleLabel?.frame = CGRect(x: 0, y: titleY, width: self.bounds.size.width, height: titleSize.height)
+
 
     }
-    
+
     override var intrinsicContentSize: CGSize{
         return .init(width: CGFloat.maximum(self.imageView?.frame.width ?? 0, self.titleLabel?.frame.width ?? 0), height: (self.imageView?.frame.height ?? 0) + (self.titleLabel?.frame.height ?? 0))
     }
@@ -193,7 +223,7 @@ class DouyinPlayerView: UIView {
         return ges
     }()
     
-    lazy var player: AVPlayer = AVPlayer()
+    lazy var player: AVQueuePlayer = AVQueuePlayer(playerItem: nil)
     
     lazy var playerLayer: AVPlayerLayer = AVPlayerLayer()
     
@@ -256,7 +286,9 @@ class DouyinPlayerView: UIView {
     }
     
     func play() {
-        self.player.play()
+        if (player.timeControlStatus == .paused || player.timeControlStatus == .none) {
+            self.player.play()
+        }
         self.updateProgressBar()
     }
     
@@ -337,22 +369,22 @@ extension DouyinPlayerView: UIGestureRecognizerDelegate {
 
 class DouyinVideoView: DouyinPlayerView {
     
-    private lazy var avatarView: DouyinAvatarView = {
+    lazy var avatarView: DouyinAvatarView = {
         let view = DouyinAvatarView(frame: .init(origin: .zero, size: .init(width: 50, height: 80)))
         return view
     }()
     
-    private lazy var infoView: DouyinInfoView = {
+    lazy var authorView: DouyinInfoView = {
         let view = DouyinInfoView()
         return view
     }()
     
-    public lazy var musicAlbumView: MusicAlbumView = {
+    lazy var musicAlbumView: MusicAlbumView = {
         let view = MusicAlbumView(frame: .zero)
         return view
     }()
     
-    public lazy var musicTitleBar: MusicTitleBar = {
+    lazy var musicTitleBar: MusicTitleBar = {
         let view = MusicTitleBar(frame: .zero)
         return view
     }()
@@ -368,6 +400,7 @@ class DouyinVideoView: DouyinPlayerView {
         button.setTitle("0", for: .normal)
         button.addTarget(self, action: #selector(likeButtonTapped(sender: )), for: .touchUpInside)
         button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.titleLabel?.textAlignment = .center
         button.sizeToFit()
         return button
     }()
@@ -380,6 +413,7 @@ class DouyinVideoView: DouyinPlayerView {
         button.tintColor = .white
         button.setTitle("0", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.titleLabel?.textAlignment = .center
         button.sizeToFit()
         button.addTarget(self, action: #selector(commentButtonTapped(sender: )), for: .touchUpInside)
         return button
@@ -394,8 +428,9 @@ class DouyinVideoView: DouyinPlayerView {
         button.tintColor = UIColor.clear
         button.setTitle("0", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
-        button.sizeToFit()
+        button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(collectButtonTapped(sender: )), for: .touchUpInside)
+        button.sizeToFit()
         return button
     }()
     
@@ -406,6 +441,7 @@ class DouyinVideoView: DouyinPlayerView {
         button.addTarget(self, action: #selector(shareButtonTapped(sender: )), for: .touchUpInside)
         button.setTitle("0", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.titleLabel?.textAlignment = .center
         button.tintColor = .white
         button.sizeToFit()
         return button
@@ -437,7 +473,7 @@ class DouyinVideoView: DouyinPlayerView {
         addSubview(musicAlbumView)
         addSubview(infoViewStack)
         
-        infoViewStack.addArrangedSubview(infoView)
+        infoViewStack.addArrangedSubview(authorView)
         infoViewStack.addArrangedSubview(musicTitleBar)
         
         activityViewStack.addArrangedSubview(likeButton)
@@ -482,7 +518,7 @@ class DouyinVideoView: DouyinPlayerView {
         
         
         // 添加选中文本时的回调
-        infoView.contentLabel.handleMentionTap { mention in
+        authorView.contentLabel.handleMentionTap { mention in
             print("Tapped mention: \(mention)")
             let alert = UIAlertController(title: "mention alert", message: mention, preferredStyle: .actionSheet)
             alert.addAction(.init(title: "确定", style: .destructive,handler: { action in
@@ -490,7 +526,7 @@ class DouyinVideoView: DouyinPlayerView {
             }))
         }
         
-        infoView.contentLabel.handleHashtagTap { hashtag in
+        authorView.contentLabel.handleHashtagTap { hashtag in
             print("Tapped hashtag: \(hashtag)")
             let alert = UIAlertController(title: "hashtag alert", message: hashtag, preferredStyle: .actionSheet)
             alert.addAction(.init(title: "确定", style: .destructive,handler: { action in
@@ -536,7 +572,7 @@ class DouyinVideoView: DouyinPlayerView {
     
     func transparentSubviews(alpha: CGFloat){
         self.activityViewStack.alpha = alpha
-        self.infoView.alpha = alpha
+        self.authorView.alpha = alpha
         self.avatarView.alpha = alpha
         self.playerProgress.alpha = alpha
         self.activityViewStack.alpha = alpha
@@ -544,4 +580,82 @@ class DouyinVideoView: DouyinPlayerView {
         self.musicAlbumView.alpha = alpha
     }
     
+    func setData(data: Datum, index: Int) {
+        self.authorView.authorText = "@" + (data.author?.nickname ?? "")
+        self.authorView.descText = data.desc
+        
+        var marqueels:[String] = []
+        for _ in 0...3 {
+            let dat = "\(data.music?.title ?? "")  (\(data.music?.author ?? ""))"
+            marqueels.append(dat)
+        }
+        self.musicTitleBar.marqueeLabel.text = marqueels.joined(separator: "     ")
+        
+        let diggCount = data.statistics?.diggCount?.chineseStyleFormattedString()
+        let commentCount = data.statistics?.commentCount?.chineseStyleFormattedString()
+        let shareCount = data.statistics?.shareCount?.chineseStyleFormattedString()
+        let collectText = data.statistics?.collectCount?.chineseStyleFormattedString()
+        self.likeText = diggCount ?? "0"
+        self.commentText = commentCount ?? "0"
+        self.shareText = shareCount ?? "0"
+        self.collectText = collectText ?? "0"
+        
+        if let createTime = data.createTime {
+            let time = Date(timeIntervalSince1970: Double(createTime))
+            let fmt = DateFormatter()
+            fmt.dateFormat = "MM月dd日"
+            self.authorView.dateText = fmt.string(from: time)
+            
+        }
+    }
+    
+    var shareText: String? {
+        set{
+            self.shareButton.setTitle(newValue, for: .normal)
+            self.shareButton.sizeToFit()
+        }
+        get{
+            self.shareButton.currentTitle
+        }
+    }
+    
+    var likeText: String? {
+        set{
+            self.likeButton.setTitle(newValue, for: .normal)
+            self.likeButton.sizeToFit()
+        }
+        get{
+            self.likeButton.currentTitle
+        }
+    }
+    
+    var commentText: String? {
+        set {
+            self.commentButton.setTitle(newValue, for: .normal)
+            self.commentButton.sizeToFit()
+        }
+        get{
+            self.commentButton.currentTitle
+        }
+    }
+    
+    var collectText: String? {
+        set {
+            self.collectButton.setTitle(newValue, for: .normal)
+            self.collectButton.sizeToFit()
+        }
+        get{
+            self.collectButton.currentTitle
+        }
+    }
+}
+
+extension Int {
+    func chineseStyleFormattedString() -> String {
+        if self >= 10000 {
+            return "\(self / 10000)" + "万"
+        } else {
+            return "\(self)"
+        }
+    }
 }

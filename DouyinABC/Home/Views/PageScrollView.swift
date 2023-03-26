@@ -24,8 +24,8 @@ class PageScrollView: UIScrollView {
     var currentIndex = 0
     var previousIndex = 0
     
-    var currentView:UIView {
-        return self.subviews[currentIndex]
+    var currentView:UIView? {
+        return self.subviews.isEmpty == false ? self.subviews[currentIndex] : nil
     }
 
     override init(frame: CGRect) {

@@ -83,6 +83,7 @@ class MusicTitleBar: UIView {
         marqueeLabel.backgroundColor = .clear
         marqueeLabel.animationCurve = .linear
         marqueeLabel.animationDelay = .zero
+        marqueeLabel.speed = .duration(20)
         
         marqueeLabel.restartLabel()
         

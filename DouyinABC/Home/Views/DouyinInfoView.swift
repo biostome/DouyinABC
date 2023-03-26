@@ -12,15 +12,15 @@ import ActiveLabel
 
 class DouyinInfoView: UIView {
     
-    var originContent: String = ""
+    private var originContent: String = ""
     
-    var isExpandContent: Bool = false
+    private var isExpandContent: Bool = false
     
-    var expandText = " 展开"
+    private var expandText = " 展开"
     
-    var collapseText = " 收起"
+    private var collapseText = " 收起"
     
-    lazy var authorNameButton: UIButton = {
+    public lazy var authorNameButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("@ABC", for: .normal)
         button.contentHorizontalAlignment = .left
@@ -29,7 +29,7 @@ class DouyinInfoView: UIView {
         return button
     }()
     
-    lazy var contentLabel: ActiveLabel = {
+    public lazy var contentLabel: ActiveLabel = {
         let label = ActiveLabel()
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 12)
@@ -89,6 +89,8 @@ class DouyinInfoView: UIView {
     
     private var expandContent = false
     
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -128,6 +130,32 @@ class DouyinInfoView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var authorText: String? {
+        set{
+            self.authorNameButton.setTitle(newValue, for: .normal)
+        }
+        get{
+            self.authorNameButton.currentTitle
+        }
+    }
     
+    var descText: String? {
+        set{
+            self.contentLabel.text = newValue
+        }
+        get{
+            self.contentLabel.text
+        }
+    }
+    
+    var dateText: String? {
+        set{
+            self.dateLabel.text = newValue
+        }
+        get{
+            self.dateLabel.text
+        }
+    }
 
 }
+

@@ -36,6 +36,8 @@ class HomeViewController: UIViewController {
     
     var videoItems = [AVPlayerItem]()
     
+    var datas:[Datum] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -82,6 +84,8 @@ class HomeViewController: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             scrollView.topAnchor.constraint(equalTo: self.view.topAnchor)
         ])
+        
+        self.loadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,37 +119,53 @@ class HomeViewController: UIViewController {
         
     }
     
+    private func loadData(){
+        guard let path = Bundle.main.path(forResource: "awemes", ofType: "json") else {
+            return
+        }
+        do {
+            let aweme = try Awemes(fromURL: URL(filePath: path))
+            self.datas = aweme.data ?? []
+            self.scrollView.reloadData()
+        }catch {
+            print(error)
+        }
+        
+    }
+    
 }
 
 extension HomeViewController: PageScrollViewDataSource {
     
     func numberOfViews(in pageScrollView: PageScrollView) -> Int{
-        return videoItems.count
+        return self.datas.count
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView, viewForItemAt index: Int) -> UIView {
         let view = DouyinVideoView(frame: view.frame)
         view.backgroundColor = .black
         // init play
-        if (index == 0 && (view.player.timeControlStatus == .paused || view.player.timeControlStatus == .none)) {
-            view.player.replaceCurrentItem(with: videoItems[index])
+        let data = self.datas[index]
+        view.setData(data: data, index: index)
+        if (index == 0) {
             view.play()
         }
         return view
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView,view: UIView, didDisplayAt index: Int){
-        let playerView = view as? DouyinVideoView
-        if playerView?.player.currentItem != videoItems[index] {
-            playerView?.player.replaceCurrentItem(with: videoItems[index])
+        if let view = view as? DouyinVideoView {
+            let data = self.datas[index]
+            view.setData(data: data, index: index)
+            view.play()
         }
-        playerView?.play()
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, didEndDisplayAt index: Int) {
-        let playerView = view as? DouyinVideoView
-        playerView?.pause()
-        playerView?.pauseImageHidden(hidden: true)
+        if let view = view as? DouyinVideoView {
+            view.pause()
+            view.pauseImageHidden(hidden: true)
+        }
     }
     
     func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, willBeginDraggingAt index: Int) {

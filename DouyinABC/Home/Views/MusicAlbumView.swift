@@ -7,14 +7,15 @@
 
 import Foundation
 import UIKit
+import SDWebImage
 
 class MusicAlbumView: UIView {
     
-    lazy var albumLayer: CALayer = {
-        let layer = CALayer()
-        layer.frame = self.bounds
-        layer.contents = UIImage(named: "album")?.cgImage
-        layer.name = "albumLayer"
+    lazy var albumImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.frame = self.bounds
+        imageView.image = UIImage(named: "album")
+        imageView.layer.name = "albumLayer"
         
         let rotaAnim = CABasicAnimation()
         rotaAnim.keyPath = "transform.rotation.z"
@@ -23,9 +24,9 @@ class MusicAlbumView: UIView {
         rotaAnim.isCumulative = true
         rotaAnim.repeatCount = Float.infinity
         
-        layer.add(rotaAnim, forKey: "rotationAnimation")
+        imageView.layer.add(rotaAnim, forKey: "rotationAnimation")
         
-        return layer
+        return imageView
     }()
     
     lazy var airplaneContainerLayer: CALayer = {
@@ -85,7 +86,7 @@ class MusicAlbumView: UIView {
         super.init(frame: frame)
         
         self.layer.addSublayer(self.airplaneContainerLayer)
-        self.layer.addSublayer(self.albumLayer)
+        self.layer.addSublayer(self.albumImageView.layer)
         self.startAnimations()
         
     }
@@ -96,7 +97,7 @@ class MusicAlbumView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.albumLayer.frame = self.bounds
+        self.albumImageView.frame = self.bounds
         self.airplaneContainerLayer.frame = self.bounds
     }
     
@@ -106,5 +107,6 @@ class MusicAlbumView: UIView {
         }
         
     }
+    
 
 }

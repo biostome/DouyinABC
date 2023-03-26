@@ -10,7 +10,8 @@ target 'DouyinABC' do
   pod 'ActiveLabel'
   pod 'Parchment', '~> 3.2'
   pod 'MarqueeLabel'
-
+  pod 'Alamofire'
+  pod 'SDWebImage', '~> 5.0'
 
   target 'DouyinABCTests' do
     inherit! :search_paths
