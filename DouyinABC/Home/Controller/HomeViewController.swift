@@ -104,13 +104,17 @@ class HomeViewController: UIViewController {
         }else{
             self.navigationController?.navigationBar.barTintColor = .yellow
         }
+        
+        if let cell = self.collectionView.cellForItem(at: .init(row: currentIndex, section: 0)) as? PlayerCell {
+            cell.videoView.play()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        if let playerView = self.scrollView.currentView as? DouyinVideoView {
-//            playerView.pause()
-//        }
+        if let cell = self.collectionView.cellForItem(at: .init(row: currentIndex, section: 0)) as? PlayerCell {
+            cell.videoView.pause()
+        }
     }
     
     override func viewDidLayoutSubviews() {
