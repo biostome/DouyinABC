@@ -71,7 +71,6 @@ class MusicTitleBar: UIView {
             marqueeLabel.leftAnchor.constraint(equalTo: preButton.rightAnchor),
             marqueeLabel.topAnchor.constraint(equalTo: topAnchor),
             marqueeLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            marqueeLabel.widthAnchor.constraint(equalToConstant: 80)
         ])
         marqueeLabel.type = .continuous
         marqueeLabel.fadeLength = 0

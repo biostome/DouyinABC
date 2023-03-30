@@ -4,6 +4,7 @@
 //   let awemes = try Awemes(json)
 
 import Foundation
+import AVKit
 
 // MARK: - Awemes
 struct Awemes: Codable {
@@ -1084,6 +1085,7 @@ struct Video: Codable {
     var duration: Int?
     var playAddrLowbr, dynamicCover: LabelTop?
     var bitRate: [BitRate]?
+    var playerItems: [AVPlayerItem]?
 
     enum CodingKeys: String, CodingKey {
         case id, ratio
@@ -1096,7 +1098,85 @@ struct Video: Codable {
         case playAddrLowbr = "play_addr_lowbr"
         case dynamicCover = "dynamic_cover"
         case bitRate = "bit_rate"
+//        case playerItems = "playerItems"
     }
+    
+    init(id: String?,
+         ratio: String?,
+         originCover: LabelTop?,
+         playAddr: LabelTop?,
+         cover: LabelTop?,
+         downloadAddr: LabelTop?,
+         playAddrLowbr: LabelTop?,
+         dynamicCover: LabelTop?,
+         bitRate: [BitRate]?,
+         height: Int?,
+         width: Int?,
+         hasWatermark: Bool?,
+         duration: Int?,
+         playerItems: [AVPlayerItem]?) {
+        self.id = id
+        self.ratio = ratio
+        self.originCover = originCover
+        self.playAddr = playAddr
+        self.cover = cover
+        self.downloadAddr = downloadAddr
+        self.playAddrLowbr = playAddrLowbr
+        self.dynamicCover = dynamicCover
+        self.bitRate = bitRate
+        self.height = height
+        self.width = width
+        self.hasWatermark = hasWatermark
+        self.duration = duration
+        self.playerItems = playerItems
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(String.self, forKey: .id)
+        ratio = try values.decode(String.self, forKey: .ratio)
+        originCover = try values.decode(LabelTop.self, forKey: .originCover)
+        playAddr = try values.decode(LabelTop.self, forKey: .playAddr)
+        cover = try values.decode(LabelTop.self, forKey: .cover)
+        downloadAddr = try values.decode(LabelTop.self, forKey: .downloadAddr)
+        playAddrLowbr = try values.decode(LabelTop.self, forKey: .playAddrLowbr)
+        dynamicCover = try values.decode(LabelTop.self, forKey: .dynamicCover)
+        bitRate = try values.decode([BitRate].self, forKey: .bitRate)
+        height = try values.decode(Int.self, forKey: .height)
+        width = try values.decode(Int.self, forKey: .width)
+        hasWatermark = try values.decode(Bool.self, forKey: .hasWatermark)
+        duration = try values.decode(Int.self, forKey: .duration)
+//        playerItems = try values.decode([AVPlayerItem].self, forKey: .playerItems)
+        
+        let urls = playAddr?.urlList?.compactMap({ uri in
+            return URL(string: uri)
+        })
+        
+        let items = urls?.compactMap({ url in
+            return AVPlayerItem(url: url)
+        })
+        playerItems = items ?? []
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(ratio, forKey: .ratio)
+        try container.encode(originCover, forKey: .originCover)
+        try container.encode(playAddr, forKey: .playAddr)
+        try container.encode(cover, forKey: .cover)
+        try container.encode(downloadAddr, forKey: .downloadAddr)
+        try container.encode(playAddrLowbr, forKey: .playAddrLowbr)
+        try container.encode(dynamicCover, forKey: .dynamicCover)
+        try container.encode(bitRate, forKey: .bitRate)
+        try container.encode(height, forKey: .height)
+        try container.encode(width, forKey: .width)
+        try container.encode(hasWatermark, forKey: .hasWatermark)
+        try container.encode(duration, forKey: .duration)
+//        try container.encode(playerItems, forKey: .playerItems)
+    }
+    
+
 }
 
 // MARK: Video convenience initializers and mutators
@@ -1117,7 +1197,7 @@ extension Video {
         try self.init(data: try Data(contentsOf: url))
     }
 
-    func with(
+    func copyWith(
         id: String? = nil,
         ratio: String? = nil,
         originCover: LabelTop? = nil,
@@ -1130,23 +1210,10 @@ extension Video {
         duration: Int? = nil,
         playAddrLowbr: LabelTop? = nil,
         dynamicCover: LabelTop? = nil,
-        bitRate: [BitRate]? = nil
+        bitRate: [BitRate]? = nil,
+        playerItems: [AVPlayerItem]? = nil
     ) -> Video {
-        return Video(
-            id: id ?? self.id,
-            ratio: ratio ?? self.ratio,
-            originCover: originCover ?? self.originCover,
-            playAddr: playAddr ?? self.playAddr,
-            cover: cover ?? self.cover,
-            height: height ?? self.height,
-            width: width ?? self.width,
-            downloadAddr: downloadAddr ?? self.downloadAddr,
-            hasWatermark: hasWatermark ?? self.hasWatermark,
-            duration: duration ?? self.duration,
-            playAddrLowbr: playAddrLowbr ?? self.playAddrLowbr,
-            dynamicCover: dynamicCover ?? self.dynamicCover,
-            bitRate: bitRate ?? self.bitRate
-        )
+        return Video(id: id ?? self.id, ratio: ratio ?? self.ratio, originCover: originCover ?? self.originCover, playAddr: playAddr ?? self.playAddr, cover: cover ?? self.cover, downloadAddr: downloadAddr ?? self.downloadAddr, playAddrLowbr: playAddrLowbr ?? self.playAddrLowbr, dynamicCover: dynamicCover ?? self.dynamicCover, bitRate: bitRate ?? self.bitRate, height: height ?? self.height, width: width ?? self.width, hasWatermark: hasWatermark ?? self.hasWatermark, duration: duration ?? self.duration, playerItems: playerItems ?? self.playerItems)
     }
 
     func jsonData() throws -> Data {
@@ -1156,6 +1223,7 @@ extension Video {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+    
 }
 
 // MARK: - BitRate

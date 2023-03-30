@@ -22,15 +22,20 @@ class HomeViewController: UIViewController {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    lazy var scrollView: PageScrollView = {
-        let view = PageScrollView(frame: .zero)
+
+    lazy var collectionView: UICollectionView = {
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        let view = UICollectionView(frame: frame, collectionViewLayout: layout)
         view.dataSource = self
         view.isPagingEnabled = true
+        view.delegate = self
+        view.register(PlayerCell.self, forCellWithReuseIdentifier: "CELL")
         view.contentInsetAdjustmentBehavior = .never
-        view.showsVerticalScrollIndicator = false
-        view.backgroundColor = .black
-        
+        view.automaticallyAdjustsScrollIndicatorInsets = false
         return view
     }()
     
@@ -41,11 +46,9 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(scrollView)
+        view.addSubview(collectionView)
 
         // Append additional URLs
-//
-//
 
         let URLs:[String] = [
             "https://www.w3schools.com/html/movie.mp4",
@@ -75,14 +78,13 @@ class HomeViewController: UIViewController {
             }
             return nil
         })
-        scrollView.reloadData()
-        
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-            scrollView.topAnchor.constraint(equalTo: self.view.topAnchor)
+            collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            collectionView.topAnchor.constraint(equalTo: self.view.topAnchor)
         ])
         
         self.loadData()
@@ -90,9 +92,6 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let playerView = self.scrollView.currentView as? DouyinVideoView {
-            playerView.play()
-        }
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithTransparentBackground()
@@ -109,9 +108,9 @@ class HomeViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if let playerView = self.scrollView.currentView as? DouyinVideoView {
-            playerView.pause()
-        }
+//        if let playerView = self.scrollView.currentView as? DouyinVideoView {
+//            playerView.pause()
+//        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -120,66 +119,101 @@ class HomeViewController: UIViewController {
     }
     
     private func loadData(){
+        Task {
+            let aweme = await requestData()
+            self.datas = aweme?.data ?? []
+            self.collectionView.reloadData()
+        }
+    }
+    
+    private func requestData() async -> Awemes? {
         guard let path = Bundle.main.path(forResource: "awemes", ofType: "json") else {
-            return
+            return nil
         }
         do {
             let aweme = try Awemes(fromURL: URL(filePath: path))
-            self.datas = aweme.data ?? []
-            self.scrollView.reloadData()
+            return aweme
         }catch {
             print(error)
         }
-        
+        return nil
     }
     
+    
+    var currentIndex: Int = 0
+    var previousIndex: Int = 0
 }
 
-extension HomeViewController: PageScrollViewDataSource {
-    
-    func numberOfViews(in pageScrollView: PageScrollView) -> Int{
+extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.datas.count
     }
     
-    func pageScrollView(_ pageScrollView: PageScrollView, viewForItemAt index: Int) -> UIView {
-        let view = DouyinVideoView(frame: view.frame)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath) as? PlayerCell
+        cell?.setData(data: self.datas[indexPath.row])
+        if indexPath.row == 0 {
+            cell?.videoView.play()
+        }
+        return cell!
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return .init(width: collectionView.bounds.width, height: collectionView.bounds.height)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.scrollViewDidEndScrollingAnimation(scrollView)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            self.scrollViewDidEndScrollingAnimation(scrollView)
+        }
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        let index = Int(scrollView.contentOffset.y / scrollView.frame.height)
+        if currentIndex != index && scrollView.subviews.count > 0 {
+            previousIndex = currentIndex
+            let previousCell = self.collectionView.cellForItem(at: IndexPath(row: previousIndex, section: 0)) as? PlayerCell
+            previousCell?.videoView.pause()
+            currentIndex = index
+            let nextCell = self.collectionView.cellForItem(at: IndexPath(row: currentIndex, section: 0)) as? PlayerCell
+            nextCell?.videoView.play()
+            nextCell?.videoView.pauseImageView.isHidden = true
+        }
+    }
+
+}
+
+class PlayerCell: UICollectionViewCell {
+    
+    lazy var videoView: DouyinVideoView  = {
+        let view = DouyinVideoView(frame: self.contentView.frame)
         view.backgroundColor = .black
-        // init play
-        let data = self.datas[index]
-        view.setData(data: data, index: index)
-        if (index == 0) {
-            view.play()
-        }
         return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(videoView)
+        videoView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            videoView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
+            videoView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor),
+            videoView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            videoView.topAnchor.constraint(equalTo: self.contentView.topAnchor)
+        ])
     }
     
-    func pageScrollView(_ pageScrollView: PageScrollView,view: UIView, didDisplayAt index: Int){
-        if let view = view as? DouyinVideoView {
-            let data = self.datas[index]
-            view.setData(data: data, index: index)
-            view.play()
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, didEndDisplayAt index: Int) {
-        if let view = view as? DouyinVideoView {
-            view.pause()
-            view.pauseImageHidden(hidden: true)
-        }
-    }
     
-    func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, willBeginDraggingAt index: Int) {
-        let playerView = view as? DouyinVideoView
-        UIView.animate(withDuration: 0.1) {
-            playerView?.transparentSubviews(alpha: 0.3)
-        }
+    func setData(data: Datum) {
+        videoView.setData(data: data)
     }
-    
-    func pageScrollView(_ pageScrollView: PageScrollView, view: UIView, didEndDraggingAt index: Int) {
-        let playerView = view as? DouyinVideoView
-        UIView.animate(withDuration: 0.1) {
-            playerView?.transparentSubviews(alpha: 1)
-        }
-    }
-    
 }

@@ -9,42 +9,13 @@ import Foundation
 import UIKit
 import AVKit
 import ActiveLabel
+import SDWebImage
 
 
 class VerticalButton: UIButton {
     
     let imageTopMargin = 0.0
     let textTopMargin = 0.0
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-//        self.imageView?.translatesAutoresizingMaskIntoConstraints = false
-//        self.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-//
-//
-//
-//
-//        if let imageView = self.imageView, let titleLabel = self.titleLabel {
-//            NSLayoutConstraint.activate([
-//                imageView.topAnchor.constraint(equalTo: topAnchor),
-//                imageView.leftAnchor.constraint(equalTo: leftAnchor),
-//                imageView.rightAnchor.constraint(equalTo: rightAnchor)
-//            ])
-//            NSLayoutConstraint.activate([
-//                titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor),
-//                titleLabel.leftAnchor.constraint(equalTo: leftAnchor),
-//                titleLabel.rightAnchor.constraint(equalTo: rightAnchor),
-//                titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-//            ])
-//
-//        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -192,7 +163,6 @@ class DraggableSlider: UISlider {
     }
 }
 
-
 class DouyinPlayerView: UIView {
     
     public lazy var playerProgress: DraggableSlider = {
@@ -227,6 +197,9 @@ class DouyinPlayerView: UIView {
     
     lazy var playerLayer: AVPlayerLayer = AVPlayerLayer()
     
+    lazy var converImageView: UIImageView = UIImageView()
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -238,6 +211,13 @@ class DouyinPlayerView: UIView {
         self.playerLayer.videoGravity = .resizeAspectFill
         
         self.layer.addSublayer(self.playerLayer)
+        
+        
+        // Add progress bar to view
+        self.converImageView.frame = self.bounds
+        self.converImageView.contentMode = .scaleAspectFill
+        self.addSubview(self.converImageView)
+        
         
         self.addSubview(pauseImageView)
         NSLayoutConstraint.activate([
@@ -269,6 +249,7 @@ class DouyinPlayerView: UIView {
         
         addGestureRecognizer(tapGestureRecognizer)
         
+
     }
     
     required init?(coder: NSCoder) {
@@ -299,16 +280,13 @@ class DouyinPlayerView: UIView {
     
     func stop() {
         self.player.pause()
+        self.updateProgressBar()
     }
     
     func replay(){
         self.player.currentItem?.seek(to: CMTime.zero, completionHandler: { finish in
             self.updateProgressBar()
         })
-    }
-    
-    func pauseImageHidden(hidden: Bool) {
-        self.pauseImageView.isHidden = hidden
     }
     
     @objc func playerItemDidFinishPlaying() {
@@ -446,7 +424,7 @@ class DouyinVideoView: DouyinPlayerView {
         button.sizeToFit()
         return button
     }()
-    
+
     public lazy var infoViewStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -454,32 +432,25 @@ class DouyinVideoView: DouyinPlayerView {
         return stack
     }()
     
-    public lazy var activityViewStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        return stack
-    }()
-    
     private var isLiked = false
     private var isCollection = false
     private var displayLink: CADisplayLink?
+    private var playerStatusObserver: NSKeyValueObservation?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         addSubview(avatarView)
-        addSubview(activityViewStack)
         addSubview(musicAlbumView)
         addSubview(infoViewStack)
         
         infoViewStack.addArrangedSubview(authorView)
         infoViewStack.addArrangedSubview(musicTitleBar)
         
-        activityViewStack.addArrangedSubview(likeButton)
-        activityViewStack.addArrangedSubview(commentButton)
-        activityViewStack.addArrangedSubview(collectButton)
-        activityViewStack.addArrangedSubview(shareButton)
+        addSubview(likeButton)
+        addSubview(commentButton)
+        addSubview(collectButton)
+        addSubview(shareButton)
         
         
         musicTitleBar.translatesAutoresizingMaskIntoConstraints = false
@@ -502,16 +473,42 @@ class DouyinVideoView: DouyinPlayerView {
             musicAlbumView.heightAnchor.constraint(equalToConstant: 40),
         ])
         
-        activityViewStack.translatesAutoresizingMaskIntoConstraints = false
+        shareButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            activityViewStack.bottomAnchor.constraint(equalTo: musicAlbumView.topAnchor, constant: -10),
-            activityViewStack.centerXAnchor.constraint(equalTo: musicAlbumView.centerXAnchor)
+            shareButton.bottomAnchor.constraint(equalTo: musicAlbumView.topAnchor, constant: -15),
+            shareButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            shareButton.widthAnchor.constraint(equalToConstant: 40),
+            shareButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        collectButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            collectButton.bottomAnchor.constraint(equalTo: shareButton.topAnchor, constant: -15),
+            collectButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            collectButton.widthAnchor.constraint(equalToConstant: 40),
+            collectButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        commentButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            commentButton.bottomAnchor.constraint(equalTo: collectButton.topAnchor, constant: -15),
+            commentButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            commentButton.widthAnchor.constraint(equalToConstant: 40),
+            commentButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        likeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            likeButton.bottomAnchor.constraint(equalTo: commentButton.topAnchor, constant: -15),
+            likeButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            likeButton.widthAnchor.constraint(equalToConstant: 40),
+            likeButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            avatarView.centerXAnchor.constraint(equalTo: activityViewStack.centerXAnchor),
-            avatarView.bottomAnchor.constraint(equalTo: activityViewStack.topAnchor, constant: -10),
+            avatarView.centerXAnchor.constraint(equalTo: likeButton.centerXAnchor),
+            avatarView.bottomAnchor.constraint(equalTo: likeButton.topAnchor, constant: -15),
             avatarView.widthAnchor.constraint(equalToConstant: 60),
             avatarView.heightAnchor.constraint(equalToConstant: 60)
         ])
@@ -571,16 +568,21 @@ class DouyinVideoView: DouyinPlayerView {
     }
     
     func transparentSubviews(alpha: CGFloat){
-        self.activityViewStack.alpha = alpha
+        self.shareButton.alpha = alpha
+        self.collectButton.alpha = alpha
+        self.commentButton.alpha = alpha
+        self.likeButton.alpha = alpha
         self.authorView.alpha = alpha
         self.avatarView.alpha = alpha
         self.playerProgress.alpha = alpha
-        self.activityViewStack.alpha = alpha
         self.musicTitleBar.alpha = alpha
         self.musicAlbumView.alpha = alpha
     }
+
     
-    func setData(data: Datum, index: Int) {
+    private var data: Datum?
+    
+    func setData(data: Datum) {
         self.authorView.authorText = "@" + (data.author?.nickname ?? "")
         self.authorView.descText = data.desc
         
@@ -607,6 +609,8 @@ class DouyinVideoView: DouyinPlayerView {
             self.authorView.dateText = fmt.string(from: time)
             
         }
+        
+        self.player.replaceCurrentItem(with: data.video?.playerItems?.first)
     }
     
     var shareText: String? {
